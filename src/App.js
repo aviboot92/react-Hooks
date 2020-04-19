@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect, useReducer} from 'react';
 import './App.css';
 
 function App() {
@@ -13,16 +13,29 @@ function App() {
     );
 }
 
+const notesReducer = (state, action) =>{
+  switch(action.type){
+    case "GET_NOTES":{
+      return [...action.notes];
+    }
+
+    default:
+      return state;
+      break;
+  }
+}
+
 const NotesDisplay = () => {
     const [notes,
-        setNotes] = useState([]);
+        notesDispatch] = useReducer(notesReducer ,[]);
 
     useEffect(()=>{
       const notes = JSON.parse(localStorage.getItem('notes'));
       // localStorage.removeItem('notes');
       console.log('I am notes from local storage', notes);
-      const notesArr = !!notes ? notes : []
-      setNotes(notesArr);
+      const notesArr = !!notes ? notes : [];
+      notesDispatch({type: "GET_NOTES", notes: notesArr});
+      // setNotes(notesArr);
     },[])
 
     const [title,
@@ -54,7 +67,7 @@ const NotesDisplay = () => {
             descreption
         };
         const newNotesArray = [note, ...notes];
-        setNotes(newNotesArray);
+        // setNotes(newNotesArray);
         setTitle('');
         setDescreption('');
       console.log('I am notes from CreateMode before SetItem', newNotesArray);
