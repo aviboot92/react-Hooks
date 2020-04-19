@@ -16,6 +16,15 @@ function App() {
 const NotesDisplay = () => {
     const [notes,
         setNotes] = useState([]);
+
+    useEffect(()=>{
+      const notes = JSON.parse(localStorage.getItem('notes'));
+      // localStorage.removeItem('notes');
+      console.log('I am notes from local storage', notes);
+      const notesArr = !!notes ? notes : []
+      setNotes(notesArr);
+    },[])
+
     const [title,
         setTitle] = useState('');
     const [descreption,
@@ -39,10 +48,17 @@ const NotesDisplay = () => {
     }
 
     const createNote = e => {
-      e.preventDefault();
-      setNotes([{title, descreption}, ...notes]);
-      setTitle('');
-      setDescreption('');
+        e.preventDefault();
+        const note = {
+            title,
+            descreption
+        };
+        const newNotesArray = [note, ...notes];
+        setNotes(newNotesArray);
+        setTitle('');
+        setDescreption('');
+      console.log('I am notes from CreateMode before SetItem', newNotesArray);
+        localStorage.setItem('notes', JSON.stringify(newNotesArray));
     }
 
     return (
@@ -51,23 +67,29 @@ const NotesDisplay = () => {
             <Note notes={notes}/>
 
             <div className="inputGrabber">
-              <h3>Add NOTE:</h3>
-              <form onSubmit={createNote}>
-                <label for='name'>Title:
-                </label>
-                <input type="text" value={title} id='name' name='title' placeholder='Add TITLE' onChange={onInputChange}/>
-                <br/>
-                <label for='descreption'>Descreption:
-                </label>
-                <textarea
-                    id='descreption'
-                    name='descreption'
-                    value={descreption}
-                    onChange={onInputChange}
-                    rows='4'
-                    cols='50'
-                    placeholder='Please add your descretion here'></textarea>
-                    <br />
+                <h3>Add NOTE:</h3>
+                <form onSubmit={createNote}>
+                    <label for='name'>Title:
+                    </label>
+                    <input
+                        type="text"
+                        value={title}
+                        id='name'
+                        name='title'
+                        placeholder='Add TITLE'
+                        onChange={onInputChange}/>
+                    <br/>
+                    <label for='descreption'>Descreption:
+                    </label>
+                    <textarea
+                        id='descreption'
+                        name='descreption'
+                        value={descreption}
+                        onChange={onInputChange}
+                        rows='4'
+                        cols='50'
+                        placeholder='Please add your descretion here'></textarea>
+                    <br/>
                     <button type='submit'>ADD NOTE</button>
                 </form>
             </div>
@@ -76,11 +98,32 @@ const NotesDisplay = () => {
 }
 
 const Note = (props) => {
-  console.log('I am Notes Array', props.notes);
+    // console.log('I am Notes Array', props.notes);
+    const {notes} = props;
 
     return (
         <Fragment>
             <h3>NOTES:</h3>
+            {notes.length !== 0 && notes.map((note, i) => {
+                return (
+                    <Fragment>
+                        <h4
+                            style={{
+                            display: "inline-block"
+                        }}>Title:
+                        </h4>
+                        {note.title}
+                        <br/>
+                        <h4
+                            style={{
+                            display: "inline-block"
+                        }}>Descreption:
+                        </h4>
+                        {note.descreption}
+                        <hr/>
+                    </Fragment>
+                )
+            })}
         </Fragment>
     )
 }
