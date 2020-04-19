@@ -19,6 +19,16 @@ const notesReducer = (state, action) =>{
       return [...action.notes];
     }
 
+    case 'ADD_NOTE':{
+      return  [action.note, ...state];
+      break;
+    }
+
+    case 'DELETE_NOTE':{
+      return state.filter((note)=> note.title !== action.title);
+      break;
+    }
+
     default:
       return state;
       break;
@@ -35,8 +45,11 @@ const NotesDisplay = () => {
       console.log('I am notes from local storage', notes);
       const notesArr = !!notes ? notes : [];
       notesDispatch({type: "GET_NOTES", notes: notesArr});
-      // setNotes(notesArr);
     },[])
+
+    useEffect(()=>{
+      localStorage.setItem('notes', JSON.stringify(notes));
+    }, [notes])
 
     const [title,
         setTitle] = useState('');
@@ -66,18 +79,19 @@ const NotesDisplay = () => {
             title,
             descreption
         };
-        const newNotesArray = [note, ...notes];
-        // setNotes(newNotesArray);
+        notesDispatch({type:'ADD_NOTE', note});
         setTitle('');
-        setDescreption('');
-      console.log('I am notes from CreateMode before SetItem', newNotesArray);
-        localStorage.setItem('notes', JSON.stringify(newNotesArray));
+        setDescreption('');  
+    }
+
+    const deleteNote = (title) =>{
+      notesDispatch({type:'DELETE_NOTE', title});
     }
 
     return (
         <Fragment>
 
-            <Note notes={notes}/>
+            <Note deleteNote={deleteNote} notes={notes}/>
 
             <div className="inputGrabber">
                 <h3>Add NOTE:</h3>
@@ -133,6 +147,7 @@ const Note = (props) => {
                         }}>Descreption:
                         </h4>
                         {note.descreption}
+                        <button onClick={()=> props.deleteNote(note.title)}><b>X</b></button>
                         <hr/>
                     </Fragment>
                 )
