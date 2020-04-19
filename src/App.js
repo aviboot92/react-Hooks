@@ -38,21 +38,31 @@ const NotesDisplay = () => {
         }
     }
 
+    const createNote = e => {
+      e.preventDefault();
+      setNotes([{title, descreption}, ...notes]);
+      setTitle('');
+      setDescreption('');
+    }
+
     return (
         <Fragment>
-            <Note notes=""/>
+
+            <Note notes={notes}/>
+
             <div className="inputGrabber">
               <h3>Add NOTE:</h3>
-              <form>
+              <form onSubmit={createNote}>
                 <label for='name'>Title:
                 </label>
-                <input type="text" id='name' name='title' placeholder='Add TITLE' onChange={onInputChange}/>
+                <input type="text" value={title} id='name' name='title' placeholder='Add TITLE' onChange={onInputChange}/>
                 <br/>
                 <label for='descreption'>Descreption:
                 </label>
                 <textarea
                     id='descreption'
                     name='descreption'
+                    value={descreption}
                     onChange={onInputChange}
                     rows='4'
                     cols='50'
@@ -66,6 +76,8 @@ const NotesDisplay = () => {
 }
 
 const Note = (props) => {
+  console.log('I am Notes Array', props.notes);
+
     return (
         <Fragment>
             <h3>NOTES:</h3>
