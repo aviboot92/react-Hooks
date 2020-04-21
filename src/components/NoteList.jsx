@@ -1,10 +1,11 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useContext} from 'react';
 import Note from './Note';
+import NotesContext from './../contexts/notes-context';
 
 const NoteList = (props) => {
     // console.log('I am Notes Array', props.notes);
-    const {notes, deleteNote} = props;
-
+    const {deleteNote} = props;
+    const {notes} = useContext(NotesContext);
     return (
         <Fragment>
             <h3>NOTES:</h3>

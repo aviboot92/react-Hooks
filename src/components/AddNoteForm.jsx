@@ -1,11 +1,14 @@
-import React, {Fragment, useState, useEffect, useReducer} from 'react';
+import React, {Fragment, useState, useContext} from 'react';
+import NotesContext from '../contexts/notes-context';
 
 /**
 * @author VAK
 * @function AddNoteForm
 **/
 
-const AddNoteForm = ({notesDispatch}) => {
+const AddNoteForm = () => {
+
+    const {notesDispatch} = useContext(NotesContext);
 
     const [title,
         setTitle] = useState('');
@@ -40,7 +43,7 @@ const AddNoteForm = ({notesDispatch}) => {
         setDescreption('');  
     }
     return (
-        <div>
+        <Fragment>
             <div className="inputGrabber">
                 <h3>Add NOTE:</h3>
                 <form onSubmit={createNote}>
@@ -68,7 +71,7 @@ const AddNoteForm = ({notesDispatch}) => {
                     <button type='submit'>ADD NOTE</button>
                 </form>
             </div>
-        </div>
+        </Fragment>
     )
 
 }

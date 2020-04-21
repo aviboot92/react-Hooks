@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import NotesContext from '../contexts/notes-context';
 
 /**
 * @author VAK
@@ -6,6 +7,9 @@ import React from 'react';
 **/
 
 const Note = ({note, deleteNote}) => {
+
+    const {notesDispatch} = useContext(NotesContext);
+
     return (
         <div>
             <h4 style={{
@@ -19,7 +23,7 @@ const Note = ({note, deleteNote}) => {
             }}>Descreption:
             </h4>
             {note.descreption}
-            <button onClick={() => deleteNote(note.title)}>
+            <button onClick={() => notesDispatch({type: 'DELETE_NOTE', title: note.title})}>
                 <b>X</b>
             </button>
             <hr/>
