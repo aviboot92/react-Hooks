@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import NotesContext from '../contexts/notes-context';
+import useMousePosition from './../hooks/useMousePosition';
 
 /**
 * @author VAK
@@ -7,11 +8,12 @@ import NotesContext from '../contexts/notes-context';
 **/
 
 const Note = ({note, deleteNote}) => {
-
     const {notesDispatch} = useContext(NotesContext);
+    const position = useMousePosition();
 
     return (
         <div>
+            <h2>{position.x} {position.y}</h2>
             <h4 style={{
                 display: "inline-block"
             }}>Title:
